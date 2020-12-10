@@ -17,14 +17,21 @@ fn main() -> Result<(), Box<dyn Error>> {
             panic!("Duplicate adapters detected");
         }
     }
-    let mut jolts = max + 3;
+    println!("{:?}",adapters);
     let mut chain = Vec::new();
     let mut vstack = Vec::new();
-    vstack.push(3);
-    adapters.push(0);
+    chain.push(max+3);
+    vstack.push(3); //3 step drop from device
+    adapters.insert(0); //wall
+    let mut jolts = max + 3;
     while jolts > 3 || !adapters.is_empty() {
+        /*
+        println!("{}",jolts);
+        println!("{:?}", chain);
+        println!("{:?}",vstack);
+        */
         match vstack.pop() {
-            Some(0) => { adapters.insert(chain.pop().unwrap());}, //expect = panic if chain is empty
+            Some(0) => { adapters.insert(chain.pop().unwrap()); jolts += vstack.last().unwrap() + 1;}, //expect = panic if chain is empty
             Some(i) => {
                 vstack.push(i-1);
                 if jolts >= i && adapters.remove(&(jolts - i)) {
@@ -37,15 +44,15 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    let dif: [usize; 3] = [0,0,0];
+    let mut dif: [usize; 3] = [0,0,0];
     let mut last = chain[0];
     for i in chain {
         if i != last {
-            dif[last-i-1];
+            dif[last-i-1] += 1;
             last = i;
         }
     }
 
-    println!("{}",dif[0] * dif[2]);
+    println!("{:?}",dif);
     Ok(())
 }
