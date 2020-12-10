@@ -31,13 +31,13 @@ fn main() -> Result<(), Box<dyn Error>> {
         println!("{:?}",vstack);
         */
         match vstack.pop() {
-            Some(0) => { adapters.insert(chain.pop().unwrap()); jolts += vstack.last().unwrap() + 1;}, //expect = panic if chain is empty
+            Some(4) => { adapters.insert(chain.pop().unwrap()); jolts += vstack.last().unwrap() + 1;}, //expect = panic if chain is empty
             Some(i) => {
-                vstack.push(i-1);
+                vstack.push(i+1);
                 if jolts >= i && adapters.remove(&(jolts - i)) {
                     chain.push(jolts-i);
                     jolts -= i;
-                    vstack.push(3);
+                    vstack.push(1);
                 }
             }
             None => panic!("Empty vstack"),
